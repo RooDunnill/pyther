@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatroom</title>
+    <script src="config.js" defer></script>
+    <script src="crypto.js" defer></script>
+    <script src="chat.js" defer></script>
+    <style>
+      body {
+        font-family: serif;
+        background: #2e3521;
+        color: #f2f1e7;
+        padding: 1rem;
+        font-size: 1rem;
+      }
+
+      #chat {
+        height: 70vh;
+        overflow-y: scroll;
+        background: #232a1c;
+        border: 1px solid #3e4a2f;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      #msg {
+        width: 80%;
+        background: #1c2115;
+        color: #f2f1e7;
+        border: 1px solid #3e4a2f;
+        padding: 0.4rem;
+      }
+
+      #send {
+        width: 18%;
+        background: #d4c8b0;
+        border: 1px solid #3e4a2f;
+        color: black;
+        font-weight: bold;
+        padding: 0.4rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="chat"></div>
+    <input id="msg" type="text" placeholder="Type a message">
+    <button id="send">Send</button>
+  </body>
+</html>

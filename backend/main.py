@@ -1,5 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI()
 connections = []
@@ -11,8 +13,9 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            for conn in connections:
-                if conn is not websocket:
-                    await conn.send_text(data)
+            for conn in connections:    
+                await conn.send_text(data)
     except WebSocketDisconnect:
         connections.remove(websocket)
+
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
