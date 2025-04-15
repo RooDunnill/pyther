@@ -1,0 +1,13 @@
+*.pyc
+*.env
+backend/keys/
+__pycache__/
+
+*.pem
+*.key
+
+.vscode/
+.idea/
+
+*.zip
+*.tar.gz
