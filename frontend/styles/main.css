@@ -139,3 +139,8 @@ color: black;
 font-weight: bold;
 padding: 0.4rem;
 }
+
+#input {
+display: flex;
+gap: 1rem; /* space between input and button */
+}
