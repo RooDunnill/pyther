@@ -1,5 +1,5 @@
                               
-html, body {
+html, body {                   /* Defines both body and html, ie the entire website */
 height: 100%;
 margin: 0;
 padding: 0;
@@ -7,15 +7,14 @@ overflow: hidden;
 background: var(--bg-main);
 }
 
-body {
+body {                           /*The main default styling, overrides the body defined above */
 font-family: var(--font-main);
-background: var(--bg-main);
 color: var(--tx-main);
 padding: 1rem;
 font-size: 1rem;
 }
 
-#topbar {
+#topbar {                          /* Title Bat */
 background: var(--bg-topbar);
 color: var(--tx-topbar);
 padding: 0.5rem 1rem;
@@ -37,6 +36,24 @@ border-right: 1px solid var(--bdr-sidebar);
 padding: 1rem;
 font-size: 0.9rem;
 }
+
+/* === Sidebar Link Styling === */
+
+#sidebar a {
+color: var(--tx-sidebar);       /* Normal link color */
+text-decoration: none;          /* Removes underline */
+transition: color 0.2s ease;
+}
+
+#sidebar a:hover {
+color: var(--tx-main);          /* Hover color */
+text-decoration: underline;     /* Reintroduce underline on hover */
+}
+
+#sidebar a:visited {
+color: var(--tx-sidebar);       /* Prevents purple visited links */
+}
+
 
 #sidebar ul {
 list-style: none;
@@ -61,6 +78,33 @@ border: 1px solid var(--bdr-chat);
 padding: 1rem;
 margin-bottom: 1rem;
 }
+
+/* === Chat Scrollbar Styling === */
+
+/* For Chrome, Edge, Safari */
+#chat::-webkit-scrollbar {
+width: 8px;
+}
+
+#chat::-webkit-scrollbar-track {
+background: var(--bg-chat);
+}
+
+#chat::-webkit-scrollbar-thumb {
+background: var(--bdr-chat);
+border-radius: 10px;
+}
+
+#chat::-webkit-scrollbar-thumb:hover {
+background: var(--tx-chat);
+}
+
+/* For Firefox */
+#chat {
+scrollbar-width: thin;
+scrollbar-color: var(--bdr-chat) var(--bg-chat); 
+}
+  
 
 #msg {
 width: 80%;
