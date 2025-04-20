@@ -6,87 +6,9 @@
     <script src="crypto.js" defer></script>   <!-- loads all of the needed files -->
     <script src="chat.js" defer></script>     
     <link rel="stylesheet" href="styles/colours.css">
-    <style>                                  
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background: var(--bg-main);
-      }
+    <link rel="stylesheet" href="styles/fonts.css">
+    <link rel="stylesheet" href="styles/main.css">
 
-      body {
-        font-family: serif;
-        background: var(--bg-main);
-        color: var(--tx-main);
-        padding: 1rem;
-        font-size: 1rem;
-      }
-
-      #topbar {
-        background: var(--bg-topbar);
-        color: var(--tx-topbar);
-        padding: 0.5rem 1rem;
-        font-weight: bold;
-        font-size: 1.1rem;
-        border-bottom: 1px solid var(--bdr-topbar);
-      }
-
-      #main {
-        flex: 1;
-        display: flex;
-        height: 100%;
-      }
-      
-      #sidebar {
-        width: 180px;
-        background: var(--bg-sidebar);
-        border-right: 1px solid var(--bdr-sidebar);
-        padding: 1rem;
-        font-size: 0.9rem;
-      }
-
-      #sidebar ul {
-        list-style: none;
-        padding: 0;
-      }
-
-      #sidebar li {
-        margin: 0.5rem 0;
-      }
-      
-      #content {
-        flex: 1;
-        padding: 1rem;
-      }
-
-  
-      #chat {
-        height: 70vh;
-        overflow-y: scroll;
-        background: var(--bg-chat);
-        border: 1px solid var(--bdr-chat);
-        padding: 1rem;
-        margin-bottom: 1rem;
-      }
-
-      #msg {
-        width: 80%;
-        background: var(--bg-msgbar);
-        color: var(--tx-msgbar);
-        border: 1px solid var(--bdr-msgbar);
-        padding: 0.4rem;
-      }
-
-      #send {
-        width: 18%;
-        background: var(--bg-sendbtn);
-        border: 1px solid var(--bdr-sendbtn);
-        color: black;
-        font-weight: bold;
-        padding: 0.4rem;
-      }
-    </style>
   </head>
 
   <body>                                    <!-- all of the page content -->
