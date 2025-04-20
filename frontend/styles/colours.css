@@ -6,21 +6,21 @@
     --bg-userbar: #232a1c;
     --bg-chat: #232a1c;
     --bg-msgbar: #1c2115;
-    --bg-sendbtn: #53971f;
+    --bg-sendbtn: #e9a620;
     
     /* text colours */
-    --tx-main: #f2f1e7;
-    --tx-topbar: #d4c8b0;
+    --tx-main: #c7f5c7;
+    --tx-topbar: #e9a620;
     --tx-navbar: #d4c8b0;
     --tx-userbar: #d4c8b0;
-    --tx-chat: #f2f1e7;
+    --tx-chat: #c3f1b8;
     --tx-msgbar: #f2f1e7;
     --tx-sendbtn: #000000;
 
     /* border colours */
     --bdr-main: #2e3521;
-    --bdr-topbar: #3e4a2f;
-    --bdr-navbar: #3e4a2f;
+    --bdr-topbar: #72510f;
+    --bdr-navbar: #8a6212;
     --bdr-userbar: #3e4a2f;
     --bdr-chat: #3e4a2f;
     --bdr-msgbar: #3e4a2f;

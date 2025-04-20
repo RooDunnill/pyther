@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
   socket.onmessage = function (event) {         //creates the function, receives message
     let plaintext  = decrypt(event.data);       //decrypts the message
     let line = document.createElement("div");   //creates the line element
+    line.className = "msg";                     //creates a new class called msg which is applies to the data
     line.textContent = plaintext;               //assigns the plaintext to the line
     chat.appendChild(line);                     //adds the line to the chat
     chat.scrollTop = chat.scrollHeight;         //scrolls to bottom of the chat box
