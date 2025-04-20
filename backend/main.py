@@ -32,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 if cmd in COMMANDS:
                     await COMMANDS[cmd](websocket, arg, connections)
                 else:
-                    await websocket.send_text("Unknown Command: /" + cmd)
+                    await websocket.send_text(connections[websocket]["name"] + ": unknown command /" + cmd)
                 continue
 
             if connections[websocket]["muted"]:        #checks for user mute

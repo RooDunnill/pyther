@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let input = document.getElementById("msgbar");     //finds msg in the html
   let send = document.getElementById("send");     //finds send in the html
 
+  socket.onmessage = handleSocketMessage;
 
 
   send.onclick = function () {   //when send button is pressed
@@ -20,37 +21,59 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  socket.onmessage = function (event) {         //creates the function, receives message
+  //WebSocket Message Handler
+  function handleSocketMessage(event) {
     try {
-      const data = JSON.parse(event.data);                //parses the json
+      const data = JSON.parse(event.data);
 
-      if (data.type === "chat") {
-        const plaintext = decrypt(data.message);          //decrypts the message
-        const line = document.createElement("div");       //creates the line element
-        line.className = "msg";                           //creates a new class called msg which is applies to the data
-        line.textContent = `${data.from}: ${plaintext}`;  //assigns the plaintext to the line
-        chat.appendChild(line);                           //adds the line to the chat
-        chat.scrollTop = chat.scrollHeight;               //scrolls to bottom of the chat box
-      } else if (data.type === "user-list") {
-        const userListBox = document.getElementById("user-list");
-        if (!userListBox) return;
+      switch (data.type) {
+        case "chat":
+          displayChatMessage(data);
+          break;
 
-        const count = data.count;
-        const names = data.names;
+        case "user-list":
+          updateUserList(data);
+          break;
 
-        userListBox.innerHTML = `
-          <strong>Connected users: ${count}</strong><br>
-          ${names.map(name => `• ${name}`).join("<br>")}
-        `;
+        default:
+          console.warn("Unknown message type:", data.type);
       }
+
     } catch (err) {
       console.error("Failed to parse message:", err);
-      const line = document.createElement("div");
-      line.className = "msg";
-      line.textContent = decrypt(event.data); // fallback to plaintext decrypt
-      chat.appendChild(line);
-      chat.scrollTop = chat.scrollHeight;
+      fallbackDisplayMessage(event.data);
     }
+  }
 
-  };
-});
+  //Display Chat Messages
+  function displayChatMessage(data) {
+    const plaintext = decrypt(data.message);
+    const line = document.createElement("div");
+    line.className = "msg";
+    line.textContent = `${data.from}: ${plaintext}`;
+    chat.appendChild(line);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  //Display Fallback for Raw Messages
+  function fallbackDisplayMessage(rawText) {
+    const line = document.createElement("div");
+    line.className = "msg";
+    line.textContent = decrypt(rawText);
+    chat.appendChild(line);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  //Update User List Display
+  function updateUserList(data) {
+    const userListBox = document.getElementById("user-list");
+    if (!userListBox) return;
+
+    const { count, names } = data;
+
+    userListBox.innerHTML = `
+      <strong>Connected users: ${count}</strong><br>
+      ${names.map(name => `• ${name}`).join("<br>")}
+    `;
+  }
+  });
