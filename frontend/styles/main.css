@@ -132,7 +132,7 @@ body {                           /*The main default styling, overrides the body 
     margin-bottom: 2.5rem;
     }
 
-#msg {
+#msgbar {
     flex: 9;
     height: 100%;
     background: var(--bg-msgbar);

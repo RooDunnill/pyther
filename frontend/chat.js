@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let socket = new WebSocket("ws://" + window.location.host + "/ws");  //creates a websocket from that port
 
   let chat  =  document.getElementById("chat");   //defines caht by finding chat in the html
-  let input = document.getElementById("msg");     //finds msg in the html
+  let input = document.getElementById("msgbar");     //finds msg in the html
   let send = document.getElementById("send");     //finds send in the html
 
 
