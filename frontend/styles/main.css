@@ -30,11 +30,14 @@ height: 100%;
 }
 
 #sidebar {
-width: 180px;
+width: 16.7vw;                 /* Makes the width about a sixth of the total screen */
 background: var(--bg-sidebar);
 border-right: 1px solid var(--bdr-sidebar);
-padding: 1rem;
+padding: 1rem;                 /* Adds space on the edges */
 font-size: 0.9rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 /* === Sidebar Link Styling === */
@@ -65,12 +68,16 @@ margin: 0.5rem 0;
 }
 
 #content {
-flex: 1;
+flex: 1;                     /* Takes up the remaining width other than the sidebar */
 padding: 1rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 }
 
 
 #chat {
+flex: 1;                  /* Fills all available vertical room above the input box */
 height: 70vh;
 overflow-y: scroll;
 background: var(--bg-chat);
