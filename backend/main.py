@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from commands import COMMANDS
+from utils import broadcast_user_count
 #imports all the relevent modules to create Sockets and share messages
 
 app = FastAPI()   #creates the application object
@@ -17,6 +17,8 @@ async def websocket_endpoint(websocket: WebSocket):
         "ip": client_ip,
         "muted": False,
     }
+    
+    await broadcast_user_count(connections)
 
     try:
         while True:
@@ -28,7 +30,7 @@ async def websocket_endpoint(websocket: WebSocket):
                     cmd, arg = data[1:], ""
 
                 if cmd in COMMANDS:
-                    COMMANDS[cmd](websocket, arg, connections)
+                    await COMMANDS[cmd](websocket, arg, connections)
                 else:
                     await websocket.send_text("Unknown Command: /" + cmd)
                 continue
@@ -37,13 +39,17 @@ async def websocket_endpoint(websocket: WebSocket):
                 continue
 
             sender = connections[websocket]
-            message = f"{sender['name']}: {data}"
 
-            for conn, profile in connections.items():     #loops through every users dict
-                if profile["room"] == sender["room"]:     #checks it is sending to correct room
-                    await conn.send_text(message)         #sends the text to that user
-    except WebSocketDisconnect:                        #if disconnect
-        del connections[websocket]                  #take them off of the list
+            for conn, profile in connections.items():                #loops through every users dict
+                if profile["room"] == sender["room"]:                #checks it is sending to correct room
+                    await conn.send_json({"type": "chat",
+                                           "from": sender['name'],
+                                           "room": sender['room'],
+                                           "message": data})         #sends the text to that user
+    except WebSocketDisconnect:                                      #if disconnect
+        del connections[websocket]                                   #take them off of the list
+        await broadcast_user_count(connections)                                 #still await for user count change
 
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
-#serves the frontend
+
+
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")    #serves the frontend

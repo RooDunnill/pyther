@@ -21,11 +21,36 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   socket.onmessage = function (event) {         //creates the function, receives message
-    let plaintext  = decrypt(event.data);       //decrypts the message
-    let line = document.createElement("div");   //creates the line element
-    line.className = "msg";                     //creates a new class called msg which is applies to the data
-    line.textContent = plaintext;               //assigns the plaintext to the line
-    chat.appendChild(line);                     //adds the line to the chat
-    chat.scrollTop = chat.scrollHeight;         //scrolls to bottom of the chat box
+    try {
+      const data = JSON.parse(event.data);                //parses the json
+
+      if (data.type === "chat") {
+        const plaintext = decrypt(data.message);          //decrypts the message
+        const line = document.createElement("div");       //creates the line element
+        line.className = "msg";                           //creates a new class called msg which is applies to the data
+        line.textContent = `${data.from}: ${plaintext}`;  //assigns the plaintext to the line
+        chat.appendChild(line);                           //adds the line to the chat
+        chat.scrollTop = chat.scrollHeight;               //scrolls to bottom of the chat box
+      } else if (data.type === "user-list") {
+        const userListBox = document.getElementById("user-list");
+        if (!userListBox) return;
+
+        const count = data.count;
+        const names = data.names;
+
+        userListBox.innerHTML = `
+          <strong>Connected users: ${count}</strong><br>
+          ${names.map(name => `• ${name}`).join("<br>")}
+        `;
+      }
+    } catch (err) {
+      console.error("Failed to parse message:", err);
+      const line = document.createElement("div");
+      line.className = "msg";
+      line.textContent = decrypt(event.data); // fallback to plaintext decrypt
+      chat.appendChild(line);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
   };
 });

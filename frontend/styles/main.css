@@ -37,19 +37,18 @@ body {                           /*The main default styling, overrides the body 
     }
 
 .section-title {
-    padding: 2pt 2pt;
+    padding: 0.5rem 0.5rem;
     display: flex;
     align-items: center;
-    flex: 1;
+    height: 10vh;
     font-weight: bold;
     font-size: 3vh;
     border: 2px solid var(--bdr-chat);
 }
 
 .section-body {
-    padding: 2pt 2pt;
-    display: flex;
-    flex: 9;
+    height: 90vh;
+    padding: 0.5rem 0.5rem;
     font-size: 2vh;
     border: 2px solid var(--bdr-chat);
 }

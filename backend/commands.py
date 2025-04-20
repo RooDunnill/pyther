@@ -1,3 +1,4 @@
+from utils import broadcast_user_count
 COMMANDS = {}
 
 def register(name):
@@ -7,21 +8,16 @@ def register(name):
     return wrapper
 
 @register("name")
-def assign_name(ws, arg, connections):
+async def assign_name(ws, arg, connections):
     connections[ws]["name"] = arg.strip().lower()
+    await broadcast_user_count(connections)
 
 @register("room")
-def handle_room(ws, arg, connections):
+async def handle_room(ws, arg, connections):
     connections[ws]["room"] = arg.strip().lower()
 
 @register("help")
-def return_help(ws, connections):
+async def return_help(ws, arg, connections):
     cmds = ", ".join(COMMANDS.keys())
-    ws.send_text("Available commands: " + cmds)
+    await ws.send_text("Available commands: " + cmds)
 
-
-COMMANDS = {
-    "name": assign_name,
-    "room": handle_room,
-    "help": return_help
-}
