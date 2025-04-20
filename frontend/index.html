@@ -5,29 +5,30 @@
     <script src="config.js" defer></script> 
     <script src="crypto.js" defer></script>   <!-- loads all of the needed files -->
     <script src="chat.js" defer></script>     
-    <style>                                   <!-- defines the style and the layout of page -->
+    <link rel="stylesheet" href="styles/colours.css">
+    <style>                                  
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        background: #2e3521;
+        background: var(--bg-main);
       }
 
       body {
         font-family: serif;
-        background: #2e3521;
-        color: #f2f1e7;
+        background: var(--bg-main);
+        color: var(--tx-main);
         padding: 1rem;
         font-size: 1rem;
       }
 
       #topbar {
-        background: #1c2115;
-        color: #d4c8b0;
+        background: var(--bg-topbar);
+        color: var(--tx-topbar);
         padding: 0.5rem 1rem;
         font-weight: bold;
         font-size: 1.1rem;
-        border-bottom: 1px solid #3e4a2f;
+        border-bottom: 1px solid var(--bdr-topbar);
       }
 
       #main {
@@ -38,8 +39,8 @@
       
       #sidebar {
         width: 180px;
-        background: #232a1c;
-        border-right: 1px solid #3e4a2f;
+        background: var(--bg-sidebar);
+        border-right: 1px solid var(--bdr-sidebar);
         padding: 1rem;
         font-size: 0.9rem;
       }
@@ -62,24 +63,24 @@
       #chat {
         height: 70vh;
         overflow-y: scroll;
-        background: #232a1c;
-        border: 1px solid #3e4a2f;
+        background: var(--bg-chat);
+        border: 1px solid var(--bdr-chat);
         padding: 1rem;
         margin-bottom: 1rem;
       }
 
       #msg {
         width: 80%;
-        background: #1c2115;
-        color: #f2f1e7;
-        border: 1px solid #3e4a2f;
+        background: var(--bg-msgbar);
+        color: var(--tx-msgbar);
+        border: 1px solid var(--bdr-msgbar);
         padding: 0.4rem;
       }
 
       #send {
         width: 18%;
-        background: #d4c8b0;
-        border: 1px solid #3e4a2f;
+        background: var(--bg-sendbtn);
+        border: 1px solid var(--bdr-sendbtn);
         color: black;
         font-weight: bold;
         padding: 0.4rem;
