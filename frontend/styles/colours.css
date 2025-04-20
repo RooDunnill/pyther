@@ -2,7 +2,8 @@
     /* background colours */
     --bg-main: #2e3521;
     --bg-topbar: #1c2115;
-    --bg-sidebar: #232a1c;
+    --bg-navbar: #232a1c;
+    --bg-userbar: #232a1c;
     --bg-chat: #232a1c;
     --bg-msgbar: #1c2115;
     --bg-sendbtn: #77d62d;
@@ -10,7 +11,8 @@
     /* text colours */
     --tx-main: #f2f1e7;
     --tx-topbar: #d4c8b0;
-    --tx-sidebar: #d4c8b0;
+    --tx-navbar: #d4c8b0;
+    --tx-userbar: #d4c8b0;
     --tx-chat: #f2f1e7;
     --tx-msgbar: #f2f1e7;
     --tx-sendbtn: #000000;
@@ -18,7 +20,8 @@
     /* border colours */
     --bdr-main: #2e3521;
     --bdr-topbar: #3e4a2f;
-    --bdr-sidebar: #3e4a2f;
+    --bdr-navbar: #3e4a2f;
+    --bdr-userbar: #3e4a2f;
     --bdr-chat: #3e4a2f;
     --bdr-msgbar: #3e4a2f;
     --bdr-sendbtn: #3e4a2f

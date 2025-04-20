@@ -10,7 +10,7 @@ background: var(--bg-main);
 body {                           /*The main default styling, overrides the body defined above */
 font-family: var(--font-main);
 color: var(--tx-main);
-padding: 1rem;
+padding: 0;
 font-size: 1rem;
 }
 
@@ -20,19 +20,30 @@ color: var(--tx-topbar);
 padding: 0.5rem 1rem;
 font-weight: bold;
 font-size: 1.1rem;
-border-bottom: 1px solid var(--bdr-topbar);
+border-bottom: 5px solid var(--bdr-topbar);
 }
 
-#main {
+#main {             /* contains the side bar and main chat area */
 flex: 1;
 display: flex;
 height: 100%;
 }
 
-#sidebar {
-width: 16.7vw;                 /* Makes the width about a sixth of the total screen */
+#userbar {
+width: 12vw;                 /* Makes the width about a sixth of the total screen */
 background: var(--bg-sidebar);
-border-right: 1px solid var(--bdr-sidebar);
+border-right: 5px solid var(--bdr-sidebar);
+padding: 1rem;                 /* Adds space on the edges */
+font-size: 0.9rem;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+#navbar {
+width: 16.7vw;                 /* Makes the width about a sixth of the total screen */
+background: var(--bg-navbar);
+border-right: 5px solid var(--bdr-navbar);
 padding: 1rem;                 /* Adds space on the edges */
 font-size: 0.9rem;
 display: flex;
@@ -42,28 +53,28 @@ justify-content: space-between;
 
 /* === Sidebar Link Styling === */
 
-#sidebar a {
-color: var(--tx-sidebar);       /* Normal link color */
+#navbar a {
+color: var(--tx-navbar);       /* Normal link color */
 text-decoration: none;          /* Removes underline */
 transition: color 0.2s ease;
 }
 
-#sidebar a:hover {
+#navbar a:hover {
 color: var(--tx-main);          /* Hover color */
 text-decoration: underline;     /* Reintroduce underline on hover */
 }
 
-#sidebar a:visited {
-color: var(--tx-sidebar);       /* Prevents purple visited links */
+#navbar a:visited {
+color: var(--tx-navbar);       /* Prevents purple visited links */
 }
 
 
-#sidebar ul {
+#navbar ul {
 list-style: none;
 padding: 0;
 }
 
-#sidebar li {
+#navbar li {
 margin: 0.5rem 0;
 }
 
@@ -78,10 +89,9 @@ justify-content: space-between;
 
 #chat {
 flex: 1;                  /* Fills all available vertical room above the input box */
-height: 70vh;
 overflow-y: scroll;
 background: var(--bg-chat);
-border: 1px solid var(--bdr-chat);
+border: 5px solid var(--bdr-chat);
 padding: 1rem;
 margin-bottom: 1rem;
 }
@@ -117,14 +127,14 @@ scrollbar-color: var(--bdr-chat) var(--bg-chat);
 width: 80%;
 background: var(--bg-msgbar);
 color: var(--tx-msgbar);
-border: 1px solid var(--bdr-msgbar);
+border: 5px solid var(--bdr-msgbar);
 padding: 0.4rem;
 }
 
 #send {
 width: 18%;
 background: var(--bg-sendbtn);
-border: 1px solid var(--bdr-sendbtn);
+border: 5px solid var(--bdr-sendbtn);
 color: black;
 font-weight: bold;
 padding: 0.4rem;
