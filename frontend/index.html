@@ -12,6 +12,7 @@
         padding: 0;
         background: #2e3521;
       }
+
       body {
         font-family: serif;
         background: #2e3521;
@@ -20,6 +21,44 @@
         font-size: 1rem;
       }
 
+      #topbar {
+        background: #1c2115;
+        color: #d4c8b0;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border-bottom: 1px solid #3e4a2f;
+      }
+
+      #main {
+        flex: 1;
+        display: flex;
+        height: 100%;
+      }
+      
+      #sidebar {
+        width: 180px;
+        background: #232a1c;
+        border-right: 1px solid #3e4a2f;
+        padding: 1rem;
+        font-size: 0.9rem;
+      }
+
+      #sidebar ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      #sidebar li {
+        margin: 0.5rem 0;
+      }
+      
+      #content {
+        flex: 1;
+        padding: 1rem;
+      }
+
+  
       #chat {
         height: 70vh;
         overflow-y: scroll;
@@ -49,8 +88,23 @@
   </head>
 
   <body>                                    <!-- all of the page content -->
-    <div id="chat"></div>                   <!-- the text display box -->
-    <input id="msg" type="text" placeholder="Type a message">   <!-- the message typing box -->
-    <button id="send">Send</button>         <!-- the send button --> 
+    <div id="topbar">Pyther Chatroom</div>
+
+    <div id="main">
+      <div id="sidebar">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Rooms</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </div>
+
+      <div id="content">
+        <div id="chat"></div>                   <!-- the text display box -->
+        <input id="msg" type="text" placeholder="Type a message">   <!-- the message typing box -->
+        <button id="send">Send</button>         <!-- the send button -->
+
+      </div>
+    </div> 
   </body>
 </html>
