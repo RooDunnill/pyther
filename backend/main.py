@@ -37,7 +37,7 @@ async def websocket_endpoint(websocket: WebSocket):
                 continue
 
             sender = connections[websocket]
-            message = f"[{sender['name']}] {data}"
+            message = f"{sender['name']}: {data}"
 
             for conn, profile in connections.items():     #loops through every users dict
                 if profile["room"] == sender["room"]:     #checks it is sending to correct room

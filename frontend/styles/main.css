@@ -1,146 +1,153 @@
-                              
+* {
+    box-sizing: border-box;
+    }
+    
+
 html, body {                   /* Defines both body and html, ie the entire website */
-height: 100%;
-margin: 0;
-padding: 0;
-overflow: hidden;
-background: var(--bg-main);
-}
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: var(--bg-main);
+    }
 
 body {                           /*The main default styling, overrides the body defined above */
-font-family: var(--font-main);
-color: var(--tx-main);
-padding: 0;
-font-size: 1rem;
-}
+    font-family: var(--font-main);
+    color: var(--tx-main);
+    padding: 0;
+    font-size: 1rem;
+    }
 
 #topbar {                          /* Title Bat */
-background: var(--bg-topbar);
-color: var(--tx-topbar);
-padding: 0.5rem 1rem;
-font-weight: bold;
-font-size: 1.1rem;
-border-bottom: 5px solid var(--bdr-topbar);
-}
+    background: var(--bg-topbar);
+    color: var(--tx-topbar);
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-bottom: 5px solid var(--bdr-topbar);
+    }
 
 #main {             /* contains the side bar and main chat area */
-flex: 1;
-display: flex;
-height: 100%;
-}
+    flex: 1;
+    display: flex;
+    height: 100%;
+    }
 
 #userbar {
-width: 12vw;                 /* Makes the width about a sixth of the total screen */
-background: var(--bg-userbar);
-border-left: 5px solid var(--bdr-userbar);
-padding: 1rem;                 /* Adds space on the edges */
-font-size: 0.9rem;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-}
+    width: 12vw;                 /* Makes the width about a sixth of the total screen */
+    background: var(--bg-userbar);
+    border-left: 5px solid var(--bdr-userbar);
+    padding: 1rem;                 /* Adds space on the edges */
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    }
 
 #navbar {
-width: 16.7vw;                 /* Makes the width about a sixth of the total screen */
-background: var(--bg-navbar);
-border-right: 5px solid var(--bdr-navbar);
-padding: 1rem;                 /* Adds space on the edges */
-font-size: 0.9rem;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-}
+    width: 16.7vw;                 /* Makes the width about a sixth of the total screen */
+    background: var(--bg-navbar);
+    border-right: 5px solid var(--bdr-navbar);
+    padding: 1rem;                 /* Adds space on the edges */
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    }
 
 /* === Sidebar Link Styling === */
 
 #navbar a {
-color: var(--tx-navbar);       /* Normal link color */
-text-decoration: none;          /* Removes underline */
-transition: color 0.2s ease;
-}
+    color: var(--tx-navbar);       /* Normal link color */
+    text-decoration: none;          /* Removes underline */
+    transition: color 0.2s ease;
+    }
 
 #navbar a:hover {
-color: var(--tx-main);          /* Hover color */
-text-decoration: underline;     /* Reintroduce underline on hover */
-}
+    color: var(--tx-main);          /* Hover color */
+    text-decoration: underline;     /* Reintroduce underline on hover */
+    }
 
 #navbar a:visited {
-color: var(--tx-navbar);       /* Prevents purple visited links */
-}
+    color: var(--tx-navbar);       /* Prevents purple visited links */
+    }
 
 
 #navbar ul {
-list-style: none;
-padding: 0;
-}
+    list-style: none;
+    padding: 0;
+    }
 
 #navbar li {
-margin: 0.5rem 0;
-}
+    margin: 0.5rem 0;
+    }
 
 #content {
-flex: 1;                     /* Takes up the remaining width other than the sidebar */
-padding: 1rem;
-display: flex;
-flex-direction: column;
-gap: 1rem;
-}
+    flex: 1;                     /* Takes up the remaining width other than the sidebar */
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    }
 
 
 #chat {
-flex: 1;                  /* Fills all available vertical room above the input box */
-overflow-y: scroll;
-background: var(--bg-chat);
-border: 5px solid var(--bdr-chat);
-padding: 1rem;
-margin-bottom: 1rem;
-}
+    flex: 9;                  /* Fills all available vertical room above the input box */
+    overflow-y: scroll;
+    background: var(--bg-chat);
+    border: 5px solid var(--bdr-chat);
+    padding: 1rem;
+    }
 
 /* === Chat Scrollbar Styling === */
 
 /* For Chrome, Edge, Safari */
 #chat::-webkit-scrollbar {
-width: 8px;
-}
+    width: 8px;
+    }
 
 #chat::-webkit-scrollbar-track {
-background: var(--bg-chat);
-}
+    background: var(--bg-chat);
+    }
 
 #chat::-webkit-scrollbar-thumb {
-background: var(--bdr-chat);
-border-radius: 10px;
-}
+    background: var(--bdr-chat);
+    border-radius: 10px;
+    }
 
 #chat::-webkit-scrollbar-thumb:hover {
-background: var(--tx-chat);
-}
+    background: var(--tx-chat);
+    }
 
 /* For Firefox */
 #chat {
-scrollbar-width: thin;
-scrollbar-color: var(--bdr-chat) var(--bg-chat); 
-}
-  
-
-#msg {
-width: 80%;
-background: var(--bg-msgbar);
-color: var(--tx-msgbar);
-border: 5px solid var(--bdr-msgbar);
-padding: 0.4rem;
-}
-
-#send {
-width: 18%;
-background: var(--bg-sendbtn);
-border: 5px solid var(--bdr-sendbtn);
-color: black;
-font-weight: bold;
-padding: 0.4rem;
-}
+    scrollbar-width: thin;
+    scrollbar-color: var(--bdr-chat) var(--bg-chat); 
+    }
 
 #input {
-display: flex;
-gap: 1rem; /* space between input and button */
-}
+    flex: 1;
+    display: flex;
+    gap: 1rem; /* space between input and button */
+    margin-bottom: 2.5rem;
+    }
+
+#msg {
+    flex: 9;
+    height: 100%;
+    background: var(--bg-msgbar);
+    color: var(--tx-msgbar);
+    border: 5px solid var(--bdr-msgbar);
+    padding: 0.4rem;
+    box-sizing: border-box;
+    }
+
+#send {
+    flex: 1;
+    background: var(--bg-sendbtn);
+    border: 5px solid var(--bdr-sendbtn);
+    color: black;
+    font-weight: bold;
+    padding: 0.4rem;
+    }
+
