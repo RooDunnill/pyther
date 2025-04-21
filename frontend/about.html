@@ -3,8 +3,7 @@
   <head>
     <title>Chatroom</title>      <!-- what appears in the tab -->  
     <script src="config.js" defer></script> 
-    <script src="crypto.js" defer></script>   <!-- loads all of the needed files -->
-    <script src="chat.js" defer></script>     
+    <script src="crypto.js" defer></script>   <!-- loads all of the needed files -->   
     <link rel="stylesheet" href="styles/colours.css">
     <link rel="stylesheet" href="styles/fonts.css">
     <link rel="stylesheet" href="styles/main.css">
@@ -12,24 +11,19 @@
   </head>
 
   <body>                                    <!-- all of the page content -->
-    <div id="topbar">Pyther Chatroom</div>
+    <div id="topbar">About</div>
 
     <div id="main">
       <div id="navbar">
         <ul>
-          <li><a href="#" onclick="loadPage('index')">Home</a></li>
+          <li><a href="index.html">Home</a></li>
           <li><a href="#">Rooms</a></li>
-          <li><a href="#" onclick="loadPage('about')">About</a></li>
+          <li><a href="about.html">About</a></li>
         </ul>
       </div>
 
       <div id="content">
-        <div id="chat" class="custom-scroll"></div>                   <!-- the text display box -->
-        <div id="input">
-          <input id="msgbar" type="text" placeholder="Type a message">   <!-- the message typing box -->
-          <button id="send">Send</button>         <!-- the send button -->
-        </div>
-
+        <div id="about" class="custom-scroll"></div>                   <!-- the text display box -->
       </div>
 
       <div id="userbar">

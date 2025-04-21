@@ -118,31 +118,39 @@ body {                           /*The main default styling, overrides the body 
     padding: 1rem;
     }
 
+#about {
+    flex: 9;                  /* Fills all available vertical room above the input box */
+    overflow-y: scroll;
+    background: var(--bg-chat);
+    border: 5px solid var(--bdr-chat);
+    padding: 1rem;
+    }
+
 /* === Chat Scrollbar Styling === */
 
 /* For Chrome, Edge, Safari */
-#chat::-webkit-scrollbar {
+.custom-scroll::-webkit-scrollbar {
     width: 8px;
-    }
+}
 
-#chat::-webkit-scrollbar-track {
+.custom-scroll::-webkit-scrollbar-track {
     background: var(--bg-chat);
-    }
+}
 
-#chat::-webkit-scrollbar-thumb {
+.custom-scroll::-webkit-scrollbar-thumb {
     background: var(--bdr-chat);
     border-radius: 10px;
-    }
+}
 
-#chat::-webkit-scrollbar-thumb:hover {
+.custom-scroll::-webkit-scrollbar-thumb:hover {
     background: var(--tx-chat);
-    }
+}
 
 /* For Firefox */
-#chat {
+.custom-scroll {
     scrollbar-width: thin;
-    scrollbar-color: var(--bdr-chat) var(--bg-chat); 
-    }
+    scrollbar-color: var(--bdr-chat) var(--bg-chat);
+}
 
 #input {
     flex: 1;

@@ -77,3 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
   }
   });
+
+  function loadPage(name) {
+    fetch(name + ".html")
+      .then(res => res.text())  
+      .then(html => {
+        document.getElementById("content").innerHTML = html;
+      });
+  }
