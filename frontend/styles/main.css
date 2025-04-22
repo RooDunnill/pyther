@@ -118,7 +118,20 @@ body {                           /*The main default styling, overrides the body 
     padding: 1rem;
     }
 
-#about {
+#base-bar {                          /* Title Bat */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    height: 12vh;
+    background: var(--bg-topbar);
+    color: var(--tx-topbar);
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    font-size: 6vh;
+    border-bottom: 5px solid var(--bdr-topbar);
+    }
+
+#base-box {
     flex: 9;                  /* Fills all available vertical room above the input box */
     overflow-y: scroll;
     background: var(--bg-chat);

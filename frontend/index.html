@@ -1,34 +1,29 @@
-<!DOCTYPE html>    <!-- tells browser to expect html5-->
+<!DOCTYPE html>                                                      <!-- tells browser to expect html5-->
 <html>
   <head>
-    <title>Chatroom</title>      <!-- what appears in the tab -->  
-    <script src="config.js" defer></script> 
-    <script src="crypto.js" defer></script>   <!-- loads all of the needed files -->
-    <script src="chat.js" defer></script>     
-    <link rel="stylesheet" href="styles/colours.css">
-    <link rel="stylesheet" href="styles/fonts.css">
-    <link rel="stylesheet" href="styles/main.css">
+    <title>Pyther</title>                                          <!-- what appears in the tab -->  
+    <script src="/static/config.js" defer></script> 
+    <script src="/static/crypto.js" defer></script>                  <!-- loads all of the needed files -->
+    <script src="/static/chat.js" defer></script>     
+    <link rel="stylesheet" href="/static/styles/colours.css">
+    <link rel="stylesheet" href="/static/styles/fonts.css">
+    <link rel="stylesheet" href="/static/styles/main.css">
 
   </head>
 
-  <body>                                    <!-- all of the page content -->
+  <body>                                                             <!-- all of the page content -->
     <div id="topbar">Pyther Chatroom</div>
 
     <div id="main">
       <div id="navbar">
         <ul>
-          <li><a href="#" onclick="loadPage('index')">Home</a></li>
-          <li><a href="#">Rooms</a></li>
-          <li><a href="#" onclick="loadPage('about')">About</a></li>
+          <li><a href="/chat" data-link>Homeroom</a></li>
+          <li><a href="/crypto" data-link>Cryptographic Protocols</a></li>
+          <li><a href="/about" data-link>About</a></li>
         </ul>
       </div>
 
       <div id="content">
-        <div id="chat" class="custom-scroll"></div>                   <!-- the text display box -->
-        <div id="input">
-          <input id="msgbar" type="text" placeholder="Type a message">   <!-- the message typing box -->
-          <button id="send">Send</button>         <!-- the send button -->
-        </div>
 
       </div>
 

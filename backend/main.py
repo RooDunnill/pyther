@@ -2,10 +2,15 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from commands import COMMANDS
 from utils import broadcast_user_count
+from fastapi.responses import FileResponse
+from fastapi import Request
+import os
 #imports all the relevent modules to create Sockets and share messages
 
 app = FastAPI()   #creates the application object
 connections = {}  #a dict of all websockets/clients connected to the website
+
+
 
 @app.websocket("/ws")       #defines a route at ws for websocket connections
 async def websocket_endpoint(websocket: WebSocket):
@@ -52,4 +57,16 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")    #serves the frontend
+app.mount("/static", StaticFiles(directory="../frontend"), name="static")     #serves all static files under this /static url
+
+
+@app.get("/")
+async def serve_root():
+    return FileResponse("../frontend/index.html")
+
+@app.get("/{full_path:path}")                    #converts the /chat to /chat.html for refreshing purposes
+async def fallback(full_path: str):
+    file_path = os.path.join("../frontend", full_path)
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    return FileResponse("../frontend/index.html")

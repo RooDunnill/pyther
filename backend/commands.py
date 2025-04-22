@@ -12,10 +12,6 @@ async def assign_name(ws, arg, connections):
     connections[ws]["name"] = arg.strip().lower()
     await broadcast_user_count(connections)
 
-@register("room")
-async def handle_room(ws, arg, connections):
-    connections[ws]["room"] = arg.strip().lower()
-
 @register("help")
 async def return_help(ws, arg, connections):
     cmds = ", ".join(COMMANDS.keys())
