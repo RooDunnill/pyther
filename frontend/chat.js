@@ -5,7 +5,7 @@ const routes = {
 };
 
 let currentRoom = "mainChat"
-let roomBuffers = { mainChat: [], sideChat: []};
+let roomBuffers = {};
 let roomRendered = { mainChat: false, sideChat: false };
 
 let latestUserList = null;
@@ -44,14 +44,14 @@ function handleSocketMessage(event) {
   }
 }
 
-function displayChatMessage(data) {
-  if (!roomBuffers[data.room]) roomBuffers[data.room] = [];
+function displayChatMessage(data) {     
+  if (!roomBuffers[data.room]) roomBuffers[data.room] = [];    //if the buffer doesnt yet exist for that chat, it will create it
   roomBuffers[data.room].push(data);
   if (data.room !== currentRoom) return;  // only show if in current room
   appendMessageToChat(data)
 }
 
-function appendMessageToChat(data) {
+function appendMessageToChat(data) {    //general chat adder
   const chat = document.getElementById("chat");
   const plaintext = decrypt(data.message);
   const line = document.createElement("div");
@@ -62,18 +62,10 @@ function appendMessageToChat(data) {
 }
 
 
-function fallbackDisplayMessage(rawText) {     //runs if doesnt know how to parse the json, or if message isnt json at all
-  const line = document.createElement("div");
-  line.className = "msg";
-  line.textContent = decrypt(rawText);
-  chat.appendChild(line);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function updateUserList(data) {      
+function updateUserList(data) {              
   latestUserList = data;                       
   const userListBox = document.getElementById("user-list");
-  if (!userListBox) return;
+  if (!userListBox) return;     //checks if the html is actually there before updating it
 
   const { count, names } = data;     //grabs the count and names from the json input
   userListBox.innerHTML = `
@@ -125,7 +117,7 @@ document.addEventListener("click", (e) => {
     if (window.location.pathname !== "/chat") {
       navigateTo("/chat");
 
-      // Delay switchRoom() until after the chat page loads
+      // Delay room switch until after the chat page loads
       setTimeout(() => {
         switchRoom(room);
       }, 100);
@@ -192,7 +184,6 @@ function switchRoom(roomName) {
     room: roomName
   }));
 
-  // Only render history once
   if (!roomRendered[roomName]) {
     const messages = roomBuffers[roomName] || [];
     messages.forEach(appendMessageToChat);
@@ -200,14 +191,13 @@ function switchRoom(roomName) {
   }
 }
 
-function clearChat() {
+function clearChat() {    //wipes all messages from the chat
   const chat = document.getElementById("chat");
   if (chat) chat.innerHTML = "";
 }
 
-function clearRoomBuffer(roomName) {
-  if (roomBuffers[roomName]) {
+function clearRoomBuffer(roomName) {     //if it exists, erase it
+  if (roomBuffers[roomName]) {    
     roomBuffers[roomName] = [];
-    roomRendered[roomName] = false; // Optional: re-render if user re-enters
   }
 }
