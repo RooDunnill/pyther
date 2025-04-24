@@ -4,7 +4,10 @@ const routes = {
   "/crypto": "crypto"
 };
 
-let messageBuffer = [];
+let currentRoom = "mainChat"
+let roomBuffers = { mainChat: [], sideChat: []};
+let roomRendered = { mainChat: false, sideChat: false };
+
 let latestUserList = null;
 
 let socket = new WebSocket("ws://" + window.location.host + "/ws");    //keeps websocket up all the time
@@ -30,10 +33,8 @@ function handleSocketMessage(event) {
         updateUserList(data);        //if message of type user-list, update the user list accordingly
         break;
       case "clear-chat":
-        const chat = document.getElementById("chat");
-        if (chat) {
-          chat.innerHTML = "";    //clears the chat of all messages
-        }
+        clearChat();
+        clearRoomBuffer(currentRoom);
       default:
         console.warn("Unknown message type:", data.type);     //fallback if unknown typing
     }
@@ -44,7 +45,14 @@ function handleSocketMessage(event) {
 }
 
 function displayChatMessage(data) {
-  messageBuffer.push(data); //saves all messages to the storage
+  if (!roomBuffers[data.room]) roomBuffers[data.room] = [];
+  roomBuffers[data.room].push(data);
+  if (data.room !== currentRoom) return;  // only show if in current room
+  appendMessageToChat(data)
+}
+
+function appendMessageToChat(data) {
+  const chat = document.getElementById("chat");
   const plaintext = decrypt(data.message);
   const line = document.createElement("div");
   line.className = "msg";
@@ -52,6 +60,7 @@ function displayChatMessage(data) {
   chat.appendChild(line);
   chat.scrollTop = chat.scrollHeight;
 }
+
 
 function fallbackDisplayMessage(rawText) {     //runs if doesnt know how to parse the json, or if message isnt json at all
   const line = document.createElement("div");
@@ -94,7 +103,8 @@ function router() {                       //connects clicking on pages with the 
       updateUserList(latestUserList);
     } else {
       socket.send(JSON.stringify({
-        type: "refresh"
+        type: "refresh",
+        room: currentRoom
       }));
     }
 }
@@ -105,7 +115,26 @@ document.addEventListener("click", (e) => {
     e.preventDefault();
     navigateTo(e.target.getAttribute("href"));
   }
+
+  if (e.target.matches("[data-room]")) {
+    e.preventDefault();
+    
+    const room = e.target.getAttribute("data-room");
+
+    // If we're not already on the /chat page, navigate to it
+    if (window.location.pathname !== "/chat") {
+      navigateTo("/chat");
+
+      // Delay switchRoom() until after the chat page loads
+      setTimeout(() => {
+        switchRoom(room);
+      }, 100);
+    } else {
+      switchRoom(room);
+    }
+  }
 });
+
 
 window.addEventListener("popstate", router);
 // Load correct page on startup
@@ -119,15 +148,6 @@ function setupChat() {
   let send = document.getElementById("send");
 
   if (!chat || !input || !send) return; // if the page isn't the chat page
-
-  messageBuffer.forEach(data => {                //for every element in the buffer, it adds that to the chat
-    const plaintext = decrypt(data.message);     //means the buffer only stores encrypted data still
-    const line = document.createElement("div");  //creates the element line to write each line of the message to
-    line.className = "msg";                      //gives the line element a class
-    line.textContent = `${data.from}: ${plaintext}`;       
-    chat.appendChild(line);                           //adds the line to the chat element
-  });
-  chat.scrollTop = chat.scrollHeight;
 
   send.onclick = function () {                           //on click
     let text = input.value;                              //grabs text from input bar
@@ -148,6 +168,7 @@ function setupChat() {
     let ciphertext = encrypt(text);                      //encrypts the text
     socket.send(JSON.stringify({
       type: "chat",
+      room: currentRoom,
       message: ciphertext
     }))};                             //sends the text
   };
@@ -157,4 +178,36 @@ function setupChat() {
       send.click();
     }
   });
+}
+
+
+function switchRoom(roomName) {
+  if (roomName === currentRoom) return;
+  roomRendered[currentRoom] = false;
+  currentRoom = roomName;
+  clearChat();
+
+  socket.send(JSON.stringify({
+    type: "switch_room",
+    room: roomName
+  }));
+
+  // Only render history once
+  if (!roomRendered[roomName]) {
+    const messages = roomBuffers[roomName] || [];
+    messages.forEach(appendMessageToChat);
+    roomRendered[roomName] = true;
+  }
+}
+
+function clearChat() {
+  const chat = document.getElementById("chat");
+  if (chat) chat.innerHTML = "";
+}
+
+function clearRoomBuffer(roomName) {
+  if (roomBuffers[roomName]) {
+    roomBuffers[roomName] = [];
+    roomRendered[roomName] = false; // Optional: re-render if user re-enters
+  }
 }

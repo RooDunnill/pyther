@@ -51,6 +51,8 @@ async def websocket_endpoint(websocket: WebSocket):
 
             
             if data["type"] == "chat":
+                if "room" in data:
+                    sender["room"] = data["room"]
                 for conn, profile in connections.items():                #loops through every users dict
                     if profile["room"] == sender["room"]:                #checks it is sending to correct room
                         await conn.send_json({"type": "chat",
