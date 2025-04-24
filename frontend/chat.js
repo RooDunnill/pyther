@@ -29,6 +29,11 @@ function handleSocketMessage(event) {
       case "user-list":
         updateUserList(data);        //if message of type user-list, update the user list accordingly
         break;
+      case "clear-chat":
+        const chat = document.getElementById("chat");
+        if (chat) {
+          chat.innerHTML = "";    //clears the chat of all messages
+        }
       default:
         console.warn("Unknown message type:", data.type);     //fallback if unknown typing
     }
