@@ -143,9 +143,10 @@ function setupChat() {
 
   send.onclick = function () {                           //on click
     let text = input.value;                              //grabs text from input bar
+    if (!input.value) return                             //prevents empty messages from being sent
     input.value = "";                                    //resets the text in the bar
 
-    if (text.startsWith("/")) {
+    if (text.startsWith("/")) {  
       let parts = text.slice(1).split(" ");  // remove '/' and split
       let command = parts[0];
       let arg = parts.slice(1).join(" ");    // supports multiple-word args
