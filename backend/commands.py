@@ -14,6 +14,10 @@ async def assign_name(ws, arg, connections):
 
 @register("help")
 async def return_help(ws, arg, connections):
-    cmds = ", ".join(COMMANDS.keys())
-    await ws.send_text("Available commands: " + cmds)
+    sender = connections[ws]
+    cmds = "\n".join(COMMANDS.keys())
+    await ws.send_json({"type": "chat",
+                        "from": sender['name'],
+                        "room": sender['room'],
+                        "message": "Here are the list of available commands:\n" + cmds})
 

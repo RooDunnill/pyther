@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from commands import COMMANDS
-from utils import broadcast_user_count
+from utils import broadcast_user_count, send_user_count
 from fastapi.responses import FileResponse
 from fastapi import Request
 import os
@@ -27,30 +27,36 @@ async def websocket_endpoint(websocket: WebSocket):
 
     try:
         while True:
-            data = await websocket.receive_text()      #waits for a message from the user 
-            if data.startswith("/"):
-                try:
-                    cmd, arg = data[1:].split(" ",1)
-                except ValueError:
-                    cmd, arg = data[1:], ""
+            data = await websocket.receive_json()      #waits for a message from the user 
+            sender = connections[websocket]
+
+            if data["type"] == "refresh":
+                await send_user_count(websocket, connections)
+                continue
+            if data["type"] == "command":
+                cmd = data.get("command", "")
+                arg = data.get("arg", "")
 
                 if cmd in COMMANDS:
                     await COMMANDS[cmd](websocket, arg, connections)
                 else:
-                    await websocket.send_text(connections[websocket]["name"] + ": unknown command /" + cmd)
+                    await websocket.send_json({"type": "chat",
+                                            "from": sender['name'],
+                                            "room": sender['room'],
+                                            "message": "Unknown Command /" + cmd})
                 continue
 
             if connections[websocket]["muted"]:        #checks for user mute
                 continue
 
-            sender = connections[websocket]
-
-            for conn, profile in connections.items():                #loops through every users dict
-                if profile["room"] == sender["room"]:                #checks it is sending to correct room
-                    await conn.send_json({"type": "chat",
-                                           "from": sender['name'],
-                                           "room": sender['room'],
-                                           "message": data})         #sends the text to that user
+            
+            if data["type"] == "chat":
+                for conn, profile in connections.items():                #loops through every users dict
+                    if profile["room"] == sender["room"]:                #checks it is sending to correct room
+                        await conn.send_json({"type": "chat",
+                                            "from": sender['name'],
+                                            "room": sender['room'],
+                                            "message": data["message"]})         #sends the text to that user
     except WebSocketDisconnect:                                      #if disconnect
         del connections[websocket]                                   #take them off of the list
         await broadcast_user_count(connections)                                 #still await for user count change

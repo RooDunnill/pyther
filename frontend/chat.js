@@ -9,6 +9,12 @@ let latestUserList = null;
 
 let socket = new WebSocket("ws://" + window.location.host + "/ws");    //keeps websocket up all the time
 
+socket.addEventListener("open", () => {
+  socket.send(JSON.stringify({
+    type: "refresh"
+  })); // trigger the server to send user-list just to this client
+});
+
 socket.onmessage = handleSocketMessage;     //when the corresponding websocket receives a message, it goes to the handler
 
 function handleSocketMessage(event) {
@@ -79,6 +85,13 @@ function router() {                       //connects clicking on pages with the 
       setupChat();  //runs setup chat to produce the messages
       
     });
+    if (latestUserList) {
+      updateUserList(latestUserList);
+    } else {
+      socket.send(JSON.stringify({
+        type: "refresh"
+      }));
+    }
 }
 
 // Intercept internal link clicks
@@ -89,17 +102,13 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// SPA back/forward nav
 window.addEventListener("popstate", router);
-
 // Load correct page on startup
 window.addEventListener("DOMContentLoaded", router);
 
-// Reusable chat setup
 function setupChat() {
-  if (latestUserList) {
-    updateUserList(latestUserList);  // safely re-inject user list when UI is ready
-  }
+  
+  
   let chat = document.getElementById("chat");               //finds the elements in the html
   let input = document.getElementById("msgbar");        
   let send = document.getElementById("send");
@@ -118,8 +127,24 @@ function setupChat() {
   send.onclick = function () {                           //on click
     let text = input.value;                              //grabs text from input bar
     input.value = "";                                    //resets the text in the bar
+
+    if (text.startsWith("/")) {
+      let parts = text.slice(1).split(" ");  // remove '/' and split
+      let command = parts[0];
+      let arg = parts.slice(1).join(" ");    // supports multiple-word args
+      socket.send(JSON.stringify({
+        type: "command",
+        command: command,
+        arg: arg
+      }))
+
+    } else {
+
     let ciphertext = encrypt(text);                      //encrypts the text
-    socket.send(ciphertext);                             //sends the text
+    socket.send(JSON.stringify({
+      type: "chat",
+      message: ciphertext
+    }))};                             //sends the text
   };
 
   input.addEventListener("keydown", function (event) {   //allows for above process with enter
