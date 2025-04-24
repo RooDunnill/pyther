@@ -10,7 +10,7 @@ def register(name):
 @register("name")
 async def assign_name(ws, arg, connections):
     arg = arg.strip()
-    if arg == "":
+    if arg == "":    #prevents blank usernames
         return
     connections[ws]["name"] = arg
     await broadcast_user_count(connections)
