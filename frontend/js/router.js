@@ -22,7 +22,7 @@ const routes = {
     const page = routes[path] || "welcome";
     console.log("router function called, room:", room)
     console.log("routing to page:", page)
-    fetch(`/static/${page}.html`)     //gets the html from the files
+    fetch(`/static/html/pages/${page}.html`)     //gets the html from the files
       .then(res => res.text())
       .then(html => {document.getElementById("content").innerHTML = html;       //takes the html and puts it in the content section within index.html
         console.log("Checking HTML elements");

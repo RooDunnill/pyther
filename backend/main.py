@@ -70,11 +70,11 @@ app.mount("/static", StaticFiles(directory="../frontend"), name="static")     #s
 
 @app.get("/")
 async def serve_root():
-    return FileResponse("../frontend/index.html")
+    return FileResponse("../frontend/html/index.html")
 
 @app.get("/{full_path:path}")                    #converts the /chat to /chat.html for refreshing purposes
 async def fallback(full_path: str):
-    file_path = os.path.join("../frontend", full_path)
+    file_path = os.path.join("../frontend/html", full_path + "html")
     if os.path.exists(file_path):
         return FileResponse(file_path)
-    return FileResponse("../frontend/index.html")
+    return FileResponse("../frontend/html/index.html")
