@@ -1,4 +1,5 @@
-import { router, handleLinkClick, handleSocketMessage } from "./chat.js";
+import { handleSocketMessage } from "./chat.js";
+import { router, handleLinkClick } from "./router.js";
 import { socket, sendQueue } from "./socket.js";
 
 socket.addEventListener("open", () => {
@@ -9,7 +10,7 @@ socket.addEventListener("open", () => {
     console.log("flushing queued messages now connected", queued)
     socket.send(JSON.stringify(queued));
   }
-  sendQueue = []; // clear after flushing
+  sendQueue.length = 0; // clear after flushing
 });
 
 

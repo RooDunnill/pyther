@@ -1,17 +1,12 @@
 import { encrypt, decrypt } from "./crypto.js";
 import { socket, sendQueue } from "./socket.js";  // imports the socket here too
 
-const routes = {
-  "/welcome": "welcome",
-  "/chat": "chat",
-  "/about": "about",
-  "/crypto": "crypto"
-};
 
-let currentRoom = "mainChat"
+
+export let currentRoom = "mainChat"
 let roomBuffers = {};
+export let latestUserList = null;
 
-let latestUserList = null;
 
 export function handleSocketMessage(event) {
   console.log("handleSocketMessage function called")
@@ -61,7 +56,7 @@ function appendMessageToChat(data) {    //general chat adder
 }
 
 
-function updateUserList(data) {     
+export function updateUserList(data) {     
   console.log("updateUserList function called")         
   latestUserList = data;                       
   const userListBox = document.getElementById("user-list");
@@ -75,60 +70,16 @@ function updateUserList(data) {
 }    //adds the users as bulletpoints
 
 
-// Set up SPA router
-function navigateTo(url, room = null) {
-  console.log("navigateTo function called, room:", room)
-  history.pushState(null, null, url);         //updates the url
-  router(room);                                   //returns some html depending on the url
-}
-
-export function router(room = null) {                       //connects clicking on pages with the corresponding html for that page
-  const path = window.location.pathname;
-  const page = routes[path] || "welcome";
-  console.log("router function called, room:", room)
-  console.log("routing to page:", page)
-  fetch(`/static/${page}.html`)     //gets the html from the files
-    .then(res => res.text())
-    .then(html => {document.getElementById("content").innerHTML = html;       //takes the html and puts it in the content section within index.html
-      console.log("Checking HTML elements");
-      console.log("chat element:", !!document.getElementById("chat"));
-      console.log("msgbar element:", !!document.getElementById("msgbar"));
-      setupChat();
-
-    
-      if (room) {
-        switchRoom(room);
-      }
-      
-      if (latestUserList) {
-        updateUserList(latestUserList);
-      } else {
-        safeSend({
-          type: "refresh",
-          room: currentRoom});
-      }
-    });   //runs setup chat to produce the messages
-}
 
 
 
 
-export function handleLinkClick(e) {
-  console.log("handleLinkClick function called, pathname:", window.location.pathname)
-  const target = e.target.closest("a");
-  if (!target) return;
-    
-  const room = e.target.getAttribute("data-room");
-  const link = target.getAttribute("href");
-
-  if (link) {
-    e.preventDefault();
-    navigateTo(link, room);  // pass both link and optional room
-  }
-}
 
 
-function setupChat() {
+
+
+
+export function setupChat() {
   console.log("setupChat called")
   let chat = document.getElementById("chat");               //finds the elements in the html
   let input = document.getElementById("msgbar");        
@@ -165,7 +116,7 @@ function setupChat() {
 }
 
 
-function switchRoom(room) {
+export function switchRoom(room) {
   console.log("switchRoom function called, room:", room)
 
   function doSwitch() {
@@ -207,7 +158,7 @@ function clearRoomBuffer(room) {     //if it exists, erase it
 }
 
 
-function safeSend(data) {
+export function safeSend(data) {
   console.log("safeSend function called")
   if (socket.readyState === WebSocket.OPEN) {
     socket.send(JSON.stringify(data));
