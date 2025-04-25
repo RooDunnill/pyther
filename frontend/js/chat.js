@@ -188,7 +188,6 @@
   function switchRoom(room) {
     console.log("switchRoom function called, room:", room)
 
-
     function doSwitch() {
       currentRoom = room;
       clearChat();
