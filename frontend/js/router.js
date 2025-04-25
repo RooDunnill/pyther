@@ -1,5 +1,4 @@
 import { setupChat, switchRoom, safeSend, currentRoom, latestUserList, updateUserList } from "./chat.js";
-import { socket } from "./socket.js";
 
 
 
@@ -30,6 +29,9 @@ const routes = {
         console.log("msgbar element:", !!document.getElementById("msgbar"));
         setupChat();
   
+        if (path === "/chat") {
+            switchRoom(currentRoom); // force re-switch into the correct room
+        }
       
         if (room) {
           switchRoom(room);

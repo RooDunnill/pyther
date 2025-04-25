@@ -2,16 +2,15 @@ import { encrypt, decrypt } from "./crypto.js";
 import { socket, sendQueue } from "./socket.js";  // imports the socket here too
 
 
-
-export let currentRoom = "mainChat"
-let roomBuffers = {};
 export let latestUserList = null;
+export let currentRoom = "mainRoom"
+let roomBuffers = {};
 
 
 export function handleSocketMessage(event) {
   console.log("handleSocketMessage function called")
   const chat = document.getElementById("chat");
-  if (!chat) {
+  if (!chat) {         //for when the page isn't a chat page
     console.log("no chat window, skipping")
     return; // no chat window visible, this allows the chat to run in the background
   }
@@ -35,6 +34,7 @@ export function handleSocketMessage(event) {
   }
 }
 
+
 function displayChatMessage(data) {    
   console.log("displayChatMessage function called, room:", data.room) 
   if (!roomBuffers[data.room]) roomBuffers[data.room] = [];    //if the buffer doesnt yet exist for that chat, it will create it
@@ -44,39 +44,30 @@ function displayChatMessage(data) {
   appendMessageToChat(data)
 }
 
-function appendMessageToChat(data) {    //general chat adder
-  console.log("appendMessageToChat function called")
-  const chat = document.getElementById("chat");
-  const plaintext = decrypt(data.message);
-  const line = document.createElement("div");
-  line.className = "msg";
-  line.textContent = `${data.from}: ${plaintext}`;
-  chat.appendChild(line);
-  chat.scrollTop = chat.scrollHeight;
+
+function appendMessageToChat(data) {                               //general chat adder
+  console.log("appendMessageToChat function called")               //logs that the function has been called
+  const chat = document.getElementById("chat");                    //gets the chat element in index.html
+  const plaintext = decrypt(data.message);                         //decrypts the data
+  const line = document.createElement("div");                      //creates a line element
+  line.className = "msg";                                          //assigns the class 'msg' to the element
+  line.textContent = `${data.from}: ${plaintext}`;                 //adds the username infront of the message plaintext
+  chat.appendChild(line);                                          //adds to the chat element
+  chat.scrollTop = chat.scrollHeight;                              //autoscrolls to the bottom
 }
 
 
 export function updateUserList(data) {     
   console.log("updateUserList function called")         
-  latestUserList = data;                       
-  const userListBox = document.getElementById("user-list");
-  if (!userListBox) return;     //checks if the html is actually there before updating it
-
-  const { count, names } = data;     //grabs the count and names from the json input
-  userListBox.innerHTML = `
+  latestUserList = data;                                             //assigns the given json data to a variable
+  const userListBox = document.getElementById("user-list");          //grabs the user-list element from the html
+  if (!userListBox) return;                                          //checks if the html is actually there before updating it
+  const { count, names } = data;                                     //grabs the count and names from the json input and assigns them as variables
+  userListBox.innerHTML = `                                         
     <strong>Connected users: ${count}</strong><br>   
     ${names.map(name => `• ${name}`).join("<br>")}     
   `;
 }    //adds the users as bulletpoints
-
-
-
-
-
-
-
-
-
 
 
 export function setupChat() {
@@ -116,18 +107,17 @@ export function setupChat() {
 }
 
 
-export function switchRoom(room) {
+export function switchRoom(room) {              
   console.log("switchRoom function called, room:", room)
-
-  function doSwitch() {
+  function doSwitch() {                                          //defines the core logic in an internal function to improve readability
     currentRoom = room;
     clearChat();
     
     const roomTitle = document.getElementById("base-bar");
     if (roomTitle) {
-      if (currentRoom === "mainRoom") {
-        roomTitle.textContent = "Homeroom";
-      } else if (currentRoom === "sideRoom") {
+      if (room === "mainRoom") {
+        roomTitle.textContent = "Homeroom";    //defines the title for each room, probably a btter way to do this in the form of a dict maybe
+      } else if (room === "sideRoom") {
         roomTitle.textContent = "Side Room";
       } else {
         roomTitle.textContent = room; // fallback
@@ -138,32 +128,33 @@ export function switchRoom(room) {
     messages.forEach(appendMessageToChat);
   }
 
-  if (socket.readyState === WebSocket.OPEN) {
+  if (socket.readyState === WebSocket.OPEN) {      //runs if open
     doSwitch();
   } else {
-    socket.addEventListener("open", doSwitch, { once: true });
+    socket.addEventListener("open", doSwitch, { once: true });    //queues till it is open
   }
 }
 
 
-function clearChat() {    //wipes all messages from the chat
+function clearChat() {                                //wipes all messages from the chat
   console.log("clearChat function called")
   const chat = document.getElementById("chat");
-  if (chat) chat.innerHTML = "";
+  if (chat) chat.innerHTML = "";                      //makes the text in the chat element empty
 }
 
-function clearRoomBuffer(room) {     //if it exists, erase it  
+
+function clearRoomBuffer(room) {                      //if it exists, erase it  
     console.log("clearRoomBuffer function called")
     roomBuffers[room] = [];
 }
 
 
-export function safeSend(data) {
-  console.log("safeSend function called")
-  if (socket.readyState === WebSocket.OPEN) {
-    socket.send(JSON.stringify(data));
-  } else if (socket.readyState === WebSocket.CONNECTING) {
-    sendQueue.push(data);  // queue it for later
+export function safeSend(data) {                     //only sends messages when it is safe to do so, ie there is a websocket connection
+  console.log("safeSend function called")            //if not, it will store them, and then send them when the websocket connection is accessed
+  if (socket.readyState === WebSocket.OPEN) {        //if the websocket is open
+    socket.send(JSON.stringify(data));               //send the data as a JSON package
+  } else if (socket.readyState === WebSocket.CONNECTING) {  //if the websocket is still connecting
+    sendQueue.push(data);                            // queue it for later
   } else {
     console.warn("WebSocket not open and not connecting. Message dropped:", data);
   }
