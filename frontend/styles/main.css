@@ -113,12 +113,6 @@ body {                           /*The main default styling, overrides the body 
     gap: 1rem;
     }
 
-#chat-topbar {
-    flex: 1;                  /* Fills all available vertical room above the input box */
-    background: var(--bg-chat);
-    border: 5px solid var(--bdr-chat);
-    padding: 1rem;
-    }
 
 #chat {
     flex: 9;                  /* Fills all available vertical room above the input box */
@@ -136,9 +130,9 @@ body {                           /*The main default styling, overrides the body 
     background: var(--bg-topbar);
     color: var(--tx-topbar);
     padding: 0.5rem 1rem;
-    font-weight: bold;
     font-size: 6vh;
     border-bottom: 5px solid var(--bdr-topbar);
+    border-left: 5px solid var(--bdr-topbar);
     }
 
 #base-box {

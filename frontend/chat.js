@@ -110,12 +110,11 @@
         console.log("msgbar element:", !!document.getElementById("msgbar"));
         setupChat();
 
-        if (path === "/chat") {
-          setupChat();
-          if (room) {
-            switchRoom(room);
-          }
+     
+        if (room) {
+          switchRoom(room);
         }
+        
         if (latestUserList) {
           updateUserList(latestUserList);
         } else {
@@ -193,11 +192,17 @@
     function doSwitch() {
       currentRoom = room;
       clearChat();
-
-      safeSend({
-        type: "switch_room",
-        room: room
-      });
+      
+      const roomTitle = document.getElementById("base-bar");
+      if (roomTitle) {
+        if (currentRoom === "mainRoom") {
+          roomTitle.textContent = "Homeroom";
+        } else if (currentRoom === "sideRoom") {
+          roomTitle.textContent = "Side Room";
+        } else {
+          roomTitle.textContent = room; // fallback
+        }
+      }
 
       const messages = roomBuffers[room] || [];
       messages.forEach(appendMessageToChat);
