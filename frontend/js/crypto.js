@@ -1,7 +1,7 @@
-function encrypt(msg) {
+export function encrypt(msg) {
   return msg;
 }
 
-function decrypt(msg) {
+export function decrypt(msg) {
   return msg;
 }

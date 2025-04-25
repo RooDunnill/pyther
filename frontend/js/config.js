@@ -1,4 +1,5 @@
 const CONFIG = {
   maxMessageLength: 256,
-  room: "main"
+  msgRate: 5,
+  nameLength: 10
 };
