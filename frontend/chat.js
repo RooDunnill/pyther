@@ -6,16 +6,22 @@ const routes = {
 
 let currentRoom = "mainChat"
 let roomBuffers = {};
+let sendQueue = [];
+
 
 let latestUserList = null;
 
 let socket = new WebSocket("ws://" + window.location.host + "/ws");    //keeps websocket up all the time
 
 socket.addEventListener("open", () => {
-  socket.send(JSON.stringify({
-    type: "refresh"
-  })); // trigger the server to send user-list just to this client
+  socket.send(JSON.stringify({ type: "refresh" }));
+
+  for (const queued of sendQueue) {
+    socket.send(JSON.stringify(queued));
+  }
+  sendQueue = []; // clear after flushing
 });
+
 
 socket.onmessage = handleSocketMessage;     //when the corresponding websocket receives a message, it goes to the handler
 
@@ -73,33 +79,38 @@ function updateUserList(data) {
 
 
 // Set up SPA router
-function navigateTo(url) {
+function navigateTo(url, room = null) {
   history.pushState(null, null, url);         //updates the url
-  router();                                   //returns some html depending on the url
+  router(room);                                   //returns some html depending on the url
 }
 
-function router() {                       //connects clicking on pages with the corresponding html for that page
+function router(room = null) {                       //connects clicking on pages with the corresponding html for that page
   const path = window.location.pathname;
   const page = routes[path] || "chat";
 
   fetch(`/static/${page}.html`)     //gets the html from the files
     .then(res => res.text())
     .then(html => {document.getElementById("content").innerHTML = html;       //takes the html and puts it in the content section within index.html
-      setupChat();  //runs setup chat to produce the messages
-      
-    });
-    if (latestUserList) {
-      updateUserList(latestUserList);
-    } else {
-      socket.send(JSON.stringify({
-        type: "refresh",
-        room: currentRoom
-      }));
-    }
+      setupChat();
+
+      if (room) {
+        switchRoom(room);
+      }
+      if (latestUserList) {
+        updateUserList(latestUserList);
+      } else {
+        safeSend({
+          type: "refresh",
+          room: currentRoom});
+      }
+    });   //runs setup chat to produce the messages
 }
 
 // Intercept internal link clicks
-document.addEventListener("click", (e) => {
+document.addEventListener("click", handleLinkClick);
+
+
+function handleLinkClick(e) {
   if (e.target.matches("[data-link]")) {
     e.preventDefault();
     navigateTo(e.target.getAttribute("href"));
@@ -112,17 +123,12 @@ document.addEventListener("click", (e) => {
 
     // If we're not already on the /chat page, navigate to it
     if (window.location.pathname !== "/chat") {
-      navigateTo("/chat");
-
-      // Delay room switch until after the chat page loads
-      setTimeout(() => {
-        switchRoom(room);
-      }, 100);
+      navigateTo("/chat", room);
     } else {
       switchRoom(room);
     }
   }
-});
+}
 
 
 window.addEventListener("popstate", router);
@@ -130,8 +136,6 @@ window.addEventListener("popstate", router);
 window.addEventListener("DOMContentLoaded", router);
 
 function setupChat() {
-  
-  
   let chat = document.getElementById("chat");               //finds the elements in the html
   let input = document.getElementById("msgbar");        
   let send = document.getElementById("send");
@@ -147,51 +151,66 @@ function setupChat() {
       let parts = text.slice(1).split(" ");  // remove '/' and split
       let command = parts[0];
       let arg = parts.slice(1).join(" ");    // supports multiple-word args
-      socket.send(JSON.stringify({
+      safeSend({
         type: "command",
         command: command,
-        arg: arg
-      }))
-
+        arg: arg})
     } else {
-
     let ciphertext = encrypt(text);                      //encrypts the text
-    socket.send(JSON.stringify({
+    safeSend({
       type: "chat",
       room: currentRoom,
       message: ciphertext
-    }))};                             //sends the text
+    })};                             //sends the text
   };
 
   input.addEventListener("keydown", function (event) {   //allows for above process with enter
     if (event.key === "Enter") {
       send.click();
-    }
-  });
+    }});
 }
 
 
 function switchRoom(roomName) {
   if (roomName === currentRoom) return;
-  currentRoom = roomName;
-  clearChat();
 
-  socket.send(JSON.stringify({
-    type: "switch_room",
-    room: roomName
-  }));
+  function doSwitch() {
+    currentRoom = roomName;
+    clearChat();
 
-  const messages = roomBuffers[roomName] || [];
-  messages.forEach(appendMessageToChat);
+    safeSend({
+      type: "switch_room",
+      room: roomName
+    });
+
+    const messages = roomBuffers[roomName] || [];
+    messages.forEach(appendMessageToChat);
+  }
+
+  if (socket.readyState === WebSocket.OPEN) {
+    doSwitch();
+  } else {
+    socket.addEventListener("open", doSwitch, { once: true });
+  }
 }
+
 
 function clearChat() {    //wipes all messages from the chat
   const chat = document.getElementById("chat");
   if (chat) chat.innerHTML = "";
 }
 
-function clearRoomBuffer(roomName) {     //if it exists, erase it
-  if (roomBuffers[roomName]) {    
+function clearRoomBuffer(roomName) {     //if it exists, erase it  
     roomBuffers[roomName] = [];
+}
+
+
+function safeSend(data) {
+  if (socket.readyState === WebSocket.OPEN) {
+    socket.send(JSON.stringify(data));
+  } else if (socket.readyState === WebSocket.CONNECTING) {
+    sendQueue.push(data);  // queue it for later
+  } else {
+    console.warn("WebSocket not open and not connecting. Message dropped:", data);
   }
 }
