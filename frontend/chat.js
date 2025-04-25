@@ -6,7 +6,6 @@ const routes = {
 
 let currentRoom = "mainChat"
 let roomBuffers = {};
-let roomRendered = { mainChat: false, sideChat: false };
 
 let latestUserList = null;
 
@@ -27,20 +26,18 @@ function handleSocketMessage(event) {
     const data = JSON.parse(event.data);
     switch (data.type) {
       case "chat":
-        displayChatMessage(data);     //displays chat messages
-        break;
+        return displayChatMessage(data);       //displays chat messages
       case "user-list":
-        updateUserList(data);        //if message of type user-list, update the user list accordingly
-        break;
+        return updateUserList(data);        //if message of type user-list, update the user list accordingly
       case "clear-chat":
         clearChat();
         clearRoomBuffer(currentRoom);
+        return;
       default:
         console.warn("Unknown message type:", data.type);     //fallback if unknown typing
     }
   } catch (err) {
     console.error("Failed to parse message:", err);
-    fallbackDisplayMessage(event.data);
   }
 }
 
@@ -176,7 +173,6 @@ function setupChat() {
 
 function switchRoom(roomName) {
   if (roomName === currentRoom) return;
-  roomRendered[currentRoom] = false;
   currentRoom = roomName;
   clearChat();
 
@@ -185,11 +181,8 @@ function switchRoom(roomName) {
     room: roomName
   }));
 
-  if (!roomRendered[roomName]) {
-    const messages = roomBuffers[roomName] || [];
-    messages.forEach(appendMessageToChat);
-    roomRendered[roomName] = true;
-  }
+  const messages = roomBuffers[roomName] || [];
+  messages.forEach(appendMessageToChat);
 }
 
 function clearChat() {    //wipes all messages from the chat
