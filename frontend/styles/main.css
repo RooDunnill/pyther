@@ -18,6 +18,24 @@ body {                           /*The main default styling, overrides the body 
     font-size: 1rem;
     }
 
+p, ul, li {
+    white-space: normal;    
+    overflow-wrap: break-word; 
+    word-break: break-word;
+}
+
+pre {
+    white-space: pre;
+    overflow-x: auto;
+    color: var(--tx-pre);
+    background: var(--bg-pre);
+    border: 2px solid var(--bdr-chat);
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 0.80rem;
+}
+
 #topbar {                          /* Title Bat */
     display: flex;
     align-items: center;
@@ -59,9 +77,8 @@ body {                           /*The main default styling, overrides the body 
     border-right: 5px solid var(--bdr-userbar);
     border-bottom: 5px solid var(--bdr-userbar);
     font-size: 0.9rem;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
+    flex-shrink: 0;
     }
 
 #navbar {
@@ -72,44 +89,42 @@ body {                           /*The main default styling, overrides the body 
     border-bottom: 5px solid var(--bdr-navbar);
     padding: 1rem;                 /* Adds space on the edges */
     font-size: 0.9rem;
-    display: flex;
-    flex-direction: column;
+    flex-shrink: 0;
     justify-content: space-between;
     }
 
-/* === Sidebar Link Styling === */
-
-#navbar a {
+.links a {
     color: var(--tx-navbar);       /* Normal link color */
     text-decoration: none;          /* Removes underline */
     transition: color 0.2s ease;
     }
 
-#navbar a:hover {
+.links a:hover {
     color: var(--tx-main);          /* Hover color */
     text-decoration: underline;     /* Reintroduce underline on hover */
     }
 
-#navbar a:visited {
+.links a:visited {
     color: var(--tx-navbar);       /* Prevents purple visited links */
     }
 
 
-#navbar ul {
+.links ul {
     list-style: none;
     padding: 0;
     }
 
-#navbar li {
+.links li {
     margin: 0.5rem 0;
     }
 
 #content {
-    flex: 1;                     /* Takes up the remaining width other than the sidebar */
     height: 95vh;
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
     gap: 1rem;
     }
 
@@ -123,10 +138,9 @@ body {                           /*The main default styling, overrides the body 
     }
 
 #base-bar {                          /* Title Bat */
-    flex: 1;
-    display: flex;
     align-items: center;
-    height: 12vh;
+    min-height: 10vh;
+    max-height: 10vh;
     background: var(--bg-topbar);
     color: var(--tx-topbar);
     padding: 0.5rem 1rem;
@@ -136,17 +150,22 @@ body {                           /*The main default styling, overrides the body 
     }
 
 #base-box {
-    flex: 9;                  /* Fills all available vertical room above the input box */
+    flex-grow: 0;           
+    flex-shrink: 1;   
+    height: 100%;
+    flex-basis: auto;
     overflow-y: scroll;
     background: var(--bg-chat);
     border: 5px solid var(--bdr-chat);
-    padding: 1rem;
+    padding: 0.3rem 1rem 0.3rem 1rem;
     margin-bottom: 2.5rem;
     }
 
-/* === Chat Scrollbar Styling === */
 
-/* For Chrome, Edge, Safari */
+
+
+
+
 .custom-scroll::-webkit-scrollbar {
     width: 8px;
 }

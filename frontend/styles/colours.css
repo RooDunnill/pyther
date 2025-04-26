@@ -7,6 +7,7 @@
     --bg-chat: #232a1c;
     --bg-msgbar: #1c2115;
     --bg-sendbtn: #e9a620;
+    --bg-pre: #1c2115;
     
     /* text colours */
     --tx-main: #c7f5c7;
@@ -16,6 +17,7 @@
     --tx-chat: #c3f1b8;
     --tx-msgbar: #f2f1e7;
     --tx-sendbtn: #000000;
+    --tx-pre: #72d272;
 
     /* border colours */
     --bdr-main: #2e3521;
