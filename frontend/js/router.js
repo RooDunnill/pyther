@@ -7,7 +7,9 @@ const routes = {
     "/chat": "chat",
     "/about": "about",
     "/crypto": "crypto",
-    "/pentesting-logs": "pentesting-logs"
+    "/pentesting-logs": "pentesting-logs",
+    "/radio-feed": "radio-feed",
+    "/pi-status": "pi-status"
   };
 
 
