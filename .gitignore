@@ -2,6 +2,7 @@
 *.env
 backend/keys/
 __pycache__/
+venv/
 
 *.pem
 *.key
